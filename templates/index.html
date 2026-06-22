@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-image: url("{{ url_for('static', filename='backgound.jpeg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+    }
+
+        .card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        p.subtitle {
+            color: #94a3b8;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="text"] {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #f1f5f9;
+    font-size: 0.95rem;
+    }
+
+    input[type="text"]::placeholder {
+    color: rgba(241, 245, 249, 0.6);
+    }
+
+    input[type="text"]:focus {
+    outline: none;
+    border-color: rgba(56, 189, 248, 0.6);
+    background: rgba(255, 255, 255, 0.12);
+    }
+
+        button {
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            border: none;
+            background: #38bdf8;
+            color: #0f172a;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.15s ease;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+        }
+
+        .qr-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .qr-result img {
+            display: block;
+            max-width: 100%;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #38bdf8;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>QR Code Generator</h1>
+        <p class="subtitle">Paste a link below to generate a scannable QR code</p>
+
+        <form method="POST" action="/">
+            <input
+                type="text"
+                name="link"
+                placeholder="https://example.com"
+                value="{{ link }}"
+                required
+            >
+            <button type="submit">Generate</button>
+        </form>
+
+        {% if link %}
+        <div class="qr-result">
+            <img src="{{ url_for('generate_qr', link=link) }}" alt="Generated QR code">
+        </div>
+        <br>
+        <a class="download-link" href="{{ url_for('generate_qr', link=link) }}" download="qrcode.png">
+            Download QR Code
+        </a>
+        {% endif %}
+    </div>
+</body>
+</html>
